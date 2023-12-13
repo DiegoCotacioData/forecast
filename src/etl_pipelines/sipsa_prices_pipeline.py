@@ -12,9 +12,14 @@ import os
 #import service_settings.infra_settings as infra
 from service_settings import etl_settings as etl
 from service_settings import infra_settings as infra
-from etl_utils import EndpointRequestor
-from etl_utils import GoogleSheets
+#from etl_utils import EndpointRequestor
+#from etl_utils import GoogleSheets
 
+#from etl_utils import EndpointRequestor
+#from etl_utils import GoogleSheets
+
+from utils.gsheets_connectors import GoogleSheets
+from utils.endpoint_request import EndpointRequestor
 
 class SipsaPricesETL:
 
