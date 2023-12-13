@@ -22,3 +22,4 @@ jobs:
 
    - name: Sipsa Prices Pipeline
      run: python src/etl_pipelines/sipsa_prices_pipeline.py
+     working-directory: ./src
