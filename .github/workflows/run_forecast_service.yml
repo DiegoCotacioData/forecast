@@ -22,4 +22,4 @@ jobs:
 
    - name: Prices Forecast Service
      run: python src/main.py
-     working-directory: ./src
+     #working-directory: ./src
