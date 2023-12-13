@@ -1,4 +1,4 @@
-name: Manual Sipsa Prices ETL
+name: Manual Forecast Prices service
 
 on:
  workflow_dispatch:
@@ -18,7 +18,7 @@ jobs:
    - name: Install dependencies
      run: |
        python -m pip install --upgrade pip
-       pip install -r etl_requirements.txt
+       pip install -r requirements.txt
 
-   - name: Sipsa Prices Pipeline
-     run: python src/etl_pipelines/sipsa_prices_pipeline.py
+   - name: Prices Forecast Service
+     run: python src/main.py
