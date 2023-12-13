@@ -34,21 +34,15 @@ class SipsaPricesETL:
     def run(self):
 
         """ Runs the SipsaPricesETL pipeline. """
-
         df_extracted = self.extract()
-
         df_transformed = self.transform(df_extracted)
-
         self.load(df_transformed)
-
-
 
 
     def extract(self) -> pd.DataFrame:
 
         """
         Extracts data from SIPSA API.
-
         Returns:
             pd.DataFrame: Extracted SIPSA data.
         """
@@ -76,10 +70,8 @@ class SipsaPricesETL:
 
         """
         Cleans and transforms the raw SIPSA data.
-
         Args:
             raw_sipsa_df (pd.DataFrame): Raw SIPSA data.
-
         Returns:
             pd.DataFrame: Transformed SIPSA data.
         """
@@ -107,7 +99,6 @@ class SipsaPricesETL:
         return sipsa_df
 
 
-
     def get_sipsa_product_data(self, product_sipsa_id: str) -> dict:
         start_date_sipsa_format = '20130101'
         end_date = datetime.today() #- timedelta(days=1)
@@ -124,7 +115,6 @@ class SipsaPricesETL:
         }
         return sipsa_payload
     
-
 
     def load(self, df_transformed):
 
@@ -153,8 +143,6 @@ class SipsaPricesETL:
         col = output_info["col"]
         clear_sheet = output_info["clear_sheet"]
         load_results.export_sheets(dataframe, url, worksheet_name, w, col, clear_sheet)
-
-
 
 
 if __name__=="__main__":

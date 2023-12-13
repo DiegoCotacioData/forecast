@@ -22,16 +22,12 @@ class ModelsEvaluationStep:
     def evaluate_models(self):
 
         """ Main method that evaluates all the models during the cross validation training
-        
         returns:
            training_metrics (pd.DataFrame): the SMAPE for all models in models_config and rolling window
         """
-        
         try:
             rolling_window = self.create_sipsa_rolling()
-
             dict_training_results = self.model_evaluation()
-
             training_metrics = self.merge_metrics(dict_training_results, rolling_window)
 
         except Exception as e:
@@ -40,17 +36,14 @@ class ModelsEvaluationStep:
         return training_metrics
 
 
-
     def model_evaluation(self) -> dict:
 
         """
         Evaluate each model on the validation dataset (including rolling window) and save the results and metrics.
-
         Args:
             rolling method (Method): create and instanciate the rolling window dataframe.
             training_artifacts (Dict): contains the models, and validation dataloader.
             training_cutoff (Int): the point in the time to define the validation set.
-
         Returns:
             rolling_window (Dataframe): A dataframe containing the predict values according to the rolling strategy.
             models_results (Dict): A dict that contains the dataframes predictions and metrics for each model

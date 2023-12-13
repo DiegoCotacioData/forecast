@@ -24,8 +24,6 @@ class ModelsTrainingStep:
     def __init__(self, training_artifacts, models_config):
 
         """
-        
-
         Args:
             training_artifacts (dict): Features DataFrame.
             models_config (list): Configuration for models.
@@ -35,15 +33,12 @@ class ModelsTrainingStep:
         self.models_config = models_config
         
 
-
     def train_models(self, fold):
 
         """
         Train all models include in the model_config dict by a for bucle.
-
         Returns:
             training_artifacts (dict): Update the dict by adding the trained models and models checkpoints
-
         """
         try:
        
@@ -53,12 +48,10 @@ class ModelsTrainingStep:
                 early_stop_callback = EarlyStopping(monitor="val_loss",min_delta=1e-4, patience=10,verbose=False, mode="min")
                 lr_logger = LearningRateMonitor()
 
-
                 # Artifact: Models
                 model = model_instance.model_class.from_dataset(
                     self.training_artifacts[model_instance.model_name]["training_dataset"],
                     **model_instance.model_params)
-
             
                 # Artifact: Trainer
                 trainer = pl.Trainer(

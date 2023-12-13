@@ -20,15 +20,11 @@ class TrainingArtifactsStep:
         self.max_prediction_length = max_prediction_length
         self.models_config = models_config
 
-
     def create_training_artifacts(self):
 
         data, training_cutoff = self.create_training_data()
-
         training_artifacts = self.create_dataloaders(data, training_cutoff)
-
         return data, training_cutoff, training_artifacts
-
 
 
     def create_training_data(self):
@@ -36,10 +32,8 @@ class TrainingArtifactsStep:
         """
         Create the training dataset adding the time indices (time_idx) and specify the cutoff data point
         to divide training from validation data
-
         Args:
             max_prediction_len (int): The forecasting horizon in days (5).
-
         Returns:
             time_index (dataframe column): Sequential numeric index from 0 to n.
             training_cutoff (int): Index for the cutoff between train and val.

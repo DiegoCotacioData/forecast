@@ -32,27 +32,22 @@ class TrainingPipeline:
 
         """
         Initializes the TrainingPipeline class.
-
         Args:
             df_input (pd.DataFrame): Features DataFrame.
             models_config (List): Configuration for models.
             max_prediction_length (int): Maximum prediction length.
         """
-        
         self.max_prediction_length = max_prediction_length
         self.df_input = df_input
         self.models_config = models_config 
-        
 
     def run_pipeline(self):
 
         """
         Runs the training pipeline.
-
         Returns:
             tuple: Cross-validation metrics, training data, training cutoff, and training artifacts.
         """
-
         logger.info("Training Pipeline started")
 
         try:
@@ -66,21 +61,17 @@ class TrainingPipeline:
                 self.df_input['created_at'].max(),
             ]
 
-            
             dict_cross_val_metrics = {}
 
             for fold, cutoff_date in enumerate(cutoff_dates):
 
                 data_subset = self.df_input[self.df_input['created_at'] <= cutoff_date]
 
-
                 artifacts = TrainingArtifactsStep(data_subset, self.max_prediction_length, self.models_config)
                 training_data, training_cutoff, training_artifacts = artifacts.create_training_artifacts()
 
-
                 model_trainer = ModelsTrainingStep(training_artifacts, self.models_config)
                 training_artifacts = model_trainer.train_models(fold)
-        
         
                 evaluation = ModelsEvaluationStep(training_data, training_artifacts, training_cutoff)
                 training_metrics = evaluation.evaluate_models()
