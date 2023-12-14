@@ -12,7 +12,25 @@ logger = get_logger(__name__)
 
 class LoadForecastOutputsStep:
 
-    def __init__(self, df_cv_metrics, df_raw_forecast, df_selected_multiple_forecast,df_selected_single_forecast, forecast_data_point, df_input):
+    def __init__(self,
+                 df_cv_metrics: pd.DataFrame,
+                 df_raw_forecast: pd.DataFrame, 
+                 df_selected_multiple_forecast: pd.DataFrame, 
+                 df_selected_single_forecast: pd.DataFrame, 
+                 forecast_data_point: pd.DataFrame, 
+                 df_input: pd.DataFrame):
+        
+        """
+        Initializes the LoadForecastOutputsStep class. 
+
+        Args:
+            df_cv_metrics: DataFrame containing cross-validation metrics.
+            df_raw_forecast: DataFrame containing raw forecast data (5 quantiles) from all models trained.
+            df_selected_multiple_forecast: DataFrame containing selected multiple forecasts.
+            df_selected_single_forecast: DataFrame containing selected single forecast.
+            forecast_data_point: DataFrame containing forecast data points.
+            df_input: DataFrame containing the training features.
+        """
        
         self.cv_metrics = df_cv_metrics
         self.df_selected_multiple_forecast = df_selected_multiple_forecast
@@ -22,36 +40,34 @@ class LoadForecastOutputsStep:
         self.df_input = df_input
         self.load_results = GoogleSheets() 
 
-        mapping_product_name = service.POSPROCESSING_PRODUCT_MAPPING
+        self._map_product_names()
 
-        # Mapping with original product name other outputs from the service
-        self.cv_metrics['product_name'] = self.cv_metrics['product_name'].map(mapping_product_name)
-        self.raw_forecast['product_name'] = self.raw_forecast['product_name'].map(mapping_product_name)
-        self.forecast_data_point['product_name'] = self.forecast_data_point['product_name'].map(mapping_product_name)
-        self.df_input['product_name'] = self.df_input['product_name'].map(mapping_product_name)
 
+    def _map_product_names(self):
+        """
+        Maps product names in the dataframes using a predefined mapping.
+        """
+        try:
+            mapping_product_name = service.POSPROCESSING_PRODUCT_MAPPING
+
+            # Mapping with the original product name for other outputs from the service
+            self.cv_metrics['product_name'] = self.cv_metrics['product_name'].map(mapping_product_name)
+            self.raw_forecast['product_name'] = self.raw_forecast['product_name'].map(mapping_product_name)
+            self.forecast_data_point['product_name'] = self.forecast_data_point['product_name'].map(mapping_product_name)
+            self.df_input['product_name'] = self.df_input['product_name'].map(mapping_product_name)
+        except Exception as e:
+            logger.error(f"Error during product name mapping: {str(e)}")
+            raise
 
 
     def load_outputs(self):
 
         """
-        Load all the outputs from the forecast services into differents tables in Google Sheets according with the type of use:
+        Load all the outputs from the forecast services in differents tables according with the type of use:
         There are 2 main of use:
 
         * Historic outputs: Append results for each service run to get an historical trace for posterior performance analysis
         * Current outputs: Daily update of the tables connected to a user dashboards. It contains the current values suggested.
-
-        Args:
-          6 dataframes
-          urls and methods params required.
-
-        Return:  (6 otputs)
-          1. cv_metrics:
-          2. raw_forecast:
-          3. selected_multiple_forecast:
-          4. selected_single_forecast:
-          5. forecast_data_point:
-          6. df_input
         """
 
         outputs = {

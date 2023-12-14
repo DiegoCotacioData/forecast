@@ -1,10 +1,8 @@
 
-
-
 # ETL PIPELINES:
 
 
-# SIPSA PRICES PIPELINES:
+# SIPSA PRICES PIPELINE:
 PRODUCTS_SIPSA_CODES ={
             'aguacate_hass': '89',
             'aguacate_papelillo': '90',

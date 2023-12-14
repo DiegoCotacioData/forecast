@@ -15,6 +15,7 @@ class FeaturePipeline:
 
         """
         Runs the feature pipeline.
+        It includes the next steps: Data extraction, transformation and feature engineering.
 
         Returns:
             pd.DataFrame: Processed features for training pipeline.
@@ -23,28 +24,26 @@ class FeaturePipeline:
 
             extract = ExtractInputDataStep()
             raw_sipsa_prices = extract.extract_raw_data()  #TODO: return raw_volumes_abasto, raw_volumes_expo
-            logger.debug("Data extraction step completed")
+            logger.info("Data extraction step completed")
 
 
             transform = TransformInputDataStep(raw_sipsa_prices)
             sipsa_prices_transf = transform.transform_raw_data() #TODO: return volumnes_abasto_transf, volumes_expo_transf
-            logger.debug("Data transformation step completed")
+            logger.info("Data transformation step completed")
 
 
             feature_eng = FeatureEngineeringStep(sipsa_prices_transf)
             prices_features = feature_eng.apply_feature_engineering() #TODO: return volumnes_abasto_features, vol_expo_features
-            logger.debug(" Feature engineering step completed")
+            logger.info(" Feature engineering step completed")
 
 
-            #TODO: merge de todos los dataframes 
-            #features_df = CreateForecastFeatures()
+            #TODO: merge all dataframes
+            #features_df = CreateForecastFeatures(prices_features, volumnes_abasto_features, volumes_expo_features)
             #features = features_df.create_features_dataframe()
             features = prices_features
-            logger.debug("All the feature pipeline steps finished successfully")
+            logger.info("All the feature pipeline steps finished successfully")
 
         except Exception as e:
             logger.error(f"An error occurred during feature pipeline: {str(e)}")
-
-        logger.info("Feature pipeline completed")
 
         return  features

@@ -1,26 +1,21 @@
 import os
 
-# Global parameters
+# GLOBAL ARGS:
 
-MAX_PREDICTION_LENGTH = 5
-MAX_ENCODER_LENGTH = 620
-BATCH_SIZE = 28
-WINDOW_DAYS = 790
+MAX_PREDICTION_LENGTH = 5   # Forecast Horizont
+MAX_ENCODER_LENGTH = 620    # Context Window 
+BATCH_SIZE = 28           
+WINDOW_DAYS = 790           # First training dataframe data point
 
+MODEL_ACCELERATOR = "cpu"  # change to GPU for prod
 
 APP_VERSION_NAME = "..."
 APP_VERSION = '1.0.0'
 
 
-FORECAST_PRODUCTS = {}
-
-PRODUCTS_MAPPING = {}
-
-
-
-LOCATION_MAPPING = {}
-
-
+FORECAST_PRODUCTS = {}      # pending
+PRODUCTS_MAPPING = {}       # pending
+LOCATION_MAPPING = {}       # pending
 
 POSPROCESSING_PRODUCT_MAPPING = {
                 'item_01':'Naranja Valencia',

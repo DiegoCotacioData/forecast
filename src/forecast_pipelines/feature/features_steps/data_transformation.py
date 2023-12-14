@@ -11,6 +11,15 @@ class TransformInputDataStep:
 
 
   def transform_raw_data(self):
+      
+      """
+      Initializes the TransformInputDataStep class.
+   
+      Args:
+        raw_sipsa_prices: Raw SIPSA prices data.
+        # raw_abasto_volumes: Raw abasto volumes data. (TODO: Uncomment and add if needed)
+        # raw_expo_volumes: Raw expo volumes data. (TODO: Uncomment and add if needed)
+      """
 
       sipsa_prices_transf = self.transform_prices_dataframe()
       #abasto_volumes_transf = self.transform_vol1_dataframe()

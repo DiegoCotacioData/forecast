@@ -33,13 +33,13 @@ class InferenceDatasetCreationStep:
         Create the decoder dataset and dataloader to make predictions
 
         Args:
-            max_encoder_length (Int):
-            max_prediction_length (Int):
+            max_encoder_length (Int): context window
+            max_prediction_length (Int): forecast horizon
 
         Return: 
             forecast_dataloaders (Pytorch Dataloaders):
-            decoder_data (Dataframe):
-            new_prediction_data (Dataframe):
+            decoder_data (Dataframe): it is the inference dataframe
+            new_prediction_data (Dataframe): 
 
         """
 

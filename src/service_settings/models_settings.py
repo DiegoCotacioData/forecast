@@ -9,6 +9,7 @@ import service_settings.forecast_settings as service
 
 context_length = service.MAX_ENCODER_LENGTH
 prediction_length = service.MAX_PREDICTION_LENGTH
+accelerator = service.MODEL_ACCELERATOR
 
 
 class BaseModelConfig:
@@ -22,7 +23,7 @@ class BaseModelConfig:
         self.model_name = None
 
     def models(self) -> Tuple:
-        """Method to return tuple of scrapers"""
+        """Method to return tuple of models"""
         return NHitsModel(), DeepARModel()
 
 
@@ -49,7 +50,7 @@ class NHitsModel(BaseModelConfig):
         }
         self.trainer_params = {
             "max_epochs": 1,
-            "accelerator": "cpu",
+            "accelerator": accelerator,
             "enable_model_summary": True,
             "gradient_clip_val": 1.0,
             "limit_train_batches": 1,
@@ -84,7 +85,7 @@ class DeepARModel(BaseModelConfig):
         }
         self.trainer_params = {
             "max_epochs": 1,
-            "accelerator": "cpu",
+            "accelerator": accelerator,
             "enable_model_summary": True,
             "gradient_clip_val": 0.1,
             "limit_train_batches": 1,

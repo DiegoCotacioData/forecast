@@ -1,7 +1,7 @@
 
 
 
-HARDWARE_TYPE = "GPU"
+
 
 # ETL_PIPELINES
 PRICES_URL_TABLE = "https://docs.google.com/spreadsheets/d/14AYqVEoY24XlKpLgoDHUnasAGeOYENjp-0IrtlOVId4/edit#gid=0"

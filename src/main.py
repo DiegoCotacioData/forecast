@@ -62,5 +62,5 @@ class RunForecastService:
 
 if __name__=="__main__":
    
-    price_forecast_service = RunForecastService()
-    price_forecast_service.run_service()
+    prices_forecast_service = RunForecastService()
+    prices_forecast_service.run_service()
