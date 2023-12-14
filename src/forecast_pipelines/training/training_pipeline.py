@@ -57,7 +57,7 @@ class TrainingPipeline:
             cutoff_dates = [
                 #self.df_input['created_at'].max() - pd.DateOffset(days=18), #uncomment if needed
                 #self.df_input['created_at'].max() - pd.DateOffset(days=12), #uncomment if needed
-                self.df_input['created_at'].max() - pd.DateOffset(days=6),
+                #self.df_input['created_at'].max() - pd.DateOffset(days=6),
                 self.df_input['created_at'].max(),
             ]
 

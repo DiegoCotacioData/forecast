@@ -5,30 +5,49 @@ import json
 import logging
 from datetime import datetime, timedelta
 import pandas as pd
-import numpy as np
-import sys
-import os
-os.getcwd() 
-sys.executable
-
-print(os.getcwd())
-
-
 from etl_utils import EndpointRequestor
 from etl_utils import GoogleSheets
 import etl_settings as etl
 
 
+def transform(raw_sipsa_df: pd.DataFrame) -> pd.DataFrame:
 
+    """
+    Cleans and transforms the raw SIPSA data.
+    Args:
+        raw_sipsa_df (pd.DataFrame): Raw SIPSA data.
+    Returns:
+        pd.DataFrame: Transformed SIPSA data.
+    """
+
+    logging.info(f'[SIPSA_PIPELINE]| ready to clean data.')
+    # raw_sipsa_df.drop(['NOM_ABASTO', 'COD_ART', 'VAL_MAX', 'VAL_MIN', 'VAR_DIARIA'], axis=1, inplace=True)
+    raw_sipsa_df.drop(['COD_ART', 'VAR_DIARIA'], axis=1, inplace=True)
+    raw_sipsa_df.rename(
+        columns={'PROM_DIARIO': 'avg_price',
+                 'Date': 'created_at',
+                 'NOM_ABASTO': 'central_mayorista',
+                 'NOM_ART': 'product_name',
+                 'VAL_MAX': 'max_price',
+                 'VAL_MIN': 'min_price',
+                 },
+        inplace=True
+    )
+    raw_sipsa_df['created_at_datetime'] = pd.to_datetime(raw_sipsa_df['created_at']).dt.date
+    raw_sipsa_df['created_at'] = raw_sipsa_df['created_at_datetime'].astype(str)
+    sipsa_df = raw_sipsa_df[['created_at', 'central_mayorista',
+                             'product_name', 'avg_price',
+                             'max_price', 'min_price']].copy()
+    logging.info(f'[SIPSA_PIPELINE]| data has been cleaned successfully.')
+
+    return sipsa_df
 
 
 class SipsaPricesETL:
-
     """
         Initializes the SipsaPricesETL class that extracts the daily prices of
         agricultural products traded in supply centers and market places.
     """
-
 
     def __init__(self):
         self.product_sipsa_codes = etl.PRODUCTS_SIPSA_CODES
@@ -36,14 +55,12 @@ class SipsaPricesETL:
         self.sipsa_url = etl.SIPSA_API_URL
         self.endpoint_requestor = EndpointRequestor(self.sipsa_url, self.sipsa_request_headers, 'SIPSA')
 
-
     def run(self):
 
         """ Runs the SipsaPricesETL pipeline. """
         df_extracted = self.extract()
-        df_transformed = self.transform(df_extracted)
+        df_transformed = transform(df_extracted)
         self.load(df_transformed)
-
 
     def extract(self) -> pd.DataFrame:
 
@@ -70,44 +87,9 @@ class SipsaPricesETL:
 
         return sipsa_data
 
-
-
-    def transform(self, raw_sipsa_df: pd.DataFrame) -> pd.DataFrame:
-
-        """
-        Cleans and transforms the raw SIPSA data.
-        Args:
-            raw_sipsa_df (pd.DataFrame): Raw SIPSA data.
-        Returns:
-            pd.DataFrame: Transformed SIPSA data.
-        """
-
-        logging.info(f'[SIPSA_PIPELINE]| ready to clean data.')
-        #raw_sipsa_df.drop(['NOM_ABASTO', 'COD_ART', 'VAL_MAX', 'VAL_MIN', 'VAR_DIARIA'], axis=1, inplace=True)
-        raw_sipsa_df.drop(['COD_ART','VAR_DIARIA'], axis=1, inplace=True)
-        raw_sipsa_df.rename(
-            columns={'PROM_DIARIO': 'avg_price',
-                     'Date': 'created_at',
-                     'NOM_ABASTO': 'central_mayorista',
-                     'NOM_ART': 'product_name',
-                     'VAL_MAX': 'max_price',
-                     'VAL_MIN': 'min_price',
-                     },
-            inplace=True
-        )
-        raw_sipsa_df['created_at_datetime'] = pd.to_datetime(raw_sipsa_df['created_at']).dt.date
-        raw_sipsa_df['created_at'] = raw_sipsa_df['created_at_datetime'].astype(str)
-        sipsa_df = raw_sipsa_df[['created_at', 'central_mayorista',
-                                  'product_name', 'avg_price',
-                                  'max_price','min_price']].copy()
-        logging.info(f'[SIPSA_PIPELINE]| data has been cleaned successfully.')
-
-        return sipsa_df
-
-
     def get_sipsa_product_data(self, product_sipsa_id: str) -> dict:
         start_date_sipsa_format = '20130101'
-        end_date = datetime.today() #- timedelta(days=1)
+        end_date = datetime.today()  # - timedelta(days=1)
         end_date_sipsa_format = end_date.strftime('%Y%m%d')
 
         sipsa_payload = {
@@ -120,7 +102,6 @@ class SipsaPricesETL:
             'tipoReporte': 'day'
         }
         return sipsa_payload
-    
 
     def load(self, df_transformed):
 
@@ -151,7 +132,6 @@ class SipsaPricesETL:
         load_results.export_sheets(dataframe, url, worksheet_name, w, col, clear_sheet)
 
 
-if __name__=="__main__":
-
-  prices_pipeline = SipsaPricesETL()
-  prices_pipeline.run()
+if __name__ == "__main__":
+    prices_pipeline = SipsaPricesETL()
+    prices_pipeline.run()
