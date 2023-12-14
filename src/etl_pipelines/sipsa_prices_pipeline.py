@@ -8,18 +8,19 @@ import pandas as pd
 import numpy as np
 import sys
 import os
-#import service_settings.etl_settings as etl
-#import service_settings.infra_settings as infra
-from service_settings import etl_settings as etl
-from service_settings import infra_settings as infra
-#from etl_utils import EndpointRequestor
-#from etl_utils import GoogleSheets
+os.getcwd() 
+sys.executable
 
-#from etl_utils import EndpointRequestor
-#from etl_utils import GoogleSheets
+print(os.getcwd())
 
-from utils.gsheets_connectors import GoogleSheets
-from utils.endpoint_request import EndpointRequestor
+
+from etl_utils import EndpointRequestor
+from etl_utils import GoogleSheets
+import etl_settings as etl
+
+
+
+
 
 class SipsaPricesETL:
 
@@ -134,8 +135,8 @@ class SipsaPricesETL:
 
         output_info = {
             "dataframe": df_transformed,
-            "url": infra.PRICES_URL_TABLE,
-            "worksheet_name": infra.PRICES_WORKSHEETNAME,
+            "url": etl.PRICES_URL_TABLE,
+            "worksheet_name": etl.PRICES_WORKSHEETNAME,
             "w": 1,
             "col": 1,
             "clear_sheet": True
