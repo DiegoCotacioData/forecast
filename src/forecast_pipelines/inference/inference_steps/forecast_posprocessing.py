@@ -18,10 +18,10 @@ class ForecastPosprocessingStep:
         Initializes the ForecastPosprocessing class.
 
         Args:
-            new_prediction_data: ...
-            cross_val_metrics: ...
-            dict_forecast_results: ...
-            training_cutoff: ...
+            new_prediction_data (pd.DataFrame):
+            cross_val_metrics (Dict): 
+            dict_forecast_results (Dict):
+            training_cutoff (Int):
         """
 
         self.dict_cross_val_metrics = dict_cross_val_metrics
@@ -46,11 +46,7 @@ class ForecastPosprocessingStep:
         
         except Exception as e:
             logger.error(f"An error occurred during the posprocess_forecast_results: {str(e)}")
-
-
         return  df_rolling_forecast, df_global_metrics, df_cv_metrics, df_raw_forecast_dataframe
-
-
 
 
     def create_rolling_forecast(self):
@@ -91,34 +87,26 @@ class ForecastPosprocessingStep:
         try:
             # model-day-product metrics
             df_cv_metrics = pd.concat(self.dict_cross_val_metrics.values(), axis=0, ignore_index=True)
-            
-            df_cv_metrics.to_csv("df_cv_metrics.csv")#QUITAR
-
+       
              # model-product metrics
             global_metrics = df_cv_metrics.groupby(['forecast_idx', 'product_name', 'central_mayorista'])[['TFT-L_smape','TFT-S_smape', 'DeepAR_smape','N-Hits_smape', 'rolling_smape']].mean().reset_index()
-            
-            #TODO: add central_mayorista in merge op
+        
             def calculate_best_smape_model(global_metrics):
                global_metrics = global_metrics.copy()
                grouped_data = global_metrics.groupby(['product_name','central_mayorista'])
 
                def find_best_model(group):
                    avg_smape = group[['TFT-L_smape','TFT-S_smape', 'DeepAR_smape', 'N-Hits_smape', 'rolling_smape']].mean()
-                   best_model = avg_smape.idxmin().split('_')[-2]  # Obtén el nombre del modelo
+                   best_model = avg_smape.idxmin().split('_')[-2]  
                    return pd.Series([f'{best_model}_smape'], index=['best_global_smape_model'])
                
                result_df = grouped_data.apply(find_best_model).reset_index()
-               result_df.to_csv("result_df.csv") #QUITAR
                final_df = global_metrics.merge(result_df, on=['product_name','central_mayorista'])
-               final_df.to_csv("final_df.csv")  #QUITAR
+
 
                return final_df
             
-            global_metrics = calculate_best_smape_model(global_metrics)
-            
-            global_metrics.to_csv("global_metrics.csv")#QUITAR
-
-            
+            global_metrics = calculate_best_smape_model(global_metrics)      
 
         except Exception as e:
             logger.error(f"An error occurred during the create_global_metrics method: {str(e)}")
@@ -129,13 +117,12 @@ class ForecastPosprocessingStep:
     def raw_forecast_creation(self, rolling_forecast, global_metrics):
 
         """
-        Este metodo crear el dataframe global con todos los resultados de los forecast y metricas (raw forecast),
-        tanto para modelos como para rolling. Recibe los diccionarios y realiza operaciones merge
-        para unificar todos los resultados.
+        This method creates the global data frame with all the forecast results and metrics (raw forecast),
+        For both models and wheels. Receive dictionaries and perform merge operations to unify all the results.
         Args:
-          rolling_forecast (Dataframe):
-          models_forecasting (Dict of Dataframes): #Atributo de clase
-          global_metrics (Dict):
+          Rolling_forecast (pd.DataFrame):
+          models_forecasting (pd.DataFramet): #Class attribute
+          global_metrics (pd.DataFrame):
         """
         
         rollingx = rolling_forecast.copy()
