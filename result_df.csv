@@ -1,0 +1,14 @@
+,product_name,central_mayorista,best_global_smape_model
+0,item_01,location_01,N-Hits_smape
+1,item_02,location_01,N-Hits_smape
+2,item_03,location_01,rolling_smape
+3,item_04,location_01,rolling_smape
+4,item_05,location_01,rolling_smape
+5,item_06,location_01,N-Hits_smape
+6,item_07,location_01,TFT-S_smape
+7,item_08,location_01,rolling_smape
+8,item_09,location_01,N-Hits_smape
+9,item_10,location_01,TFT-S_smape
+10,item_11,location_01,TFT-S_smape
+11,item_12,location_01,N-Hits_smape
+12,item_13,location_01,TFT-S_smape

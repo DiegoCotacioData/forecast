@@ -68,12 +68,13 @@ class ModelsEvaluationStep:
 
                 # Create a metrics dataframe to store results and SMAPE
                 model_metrics = self.data[lambda x: x.time_idx > self.training_cutoff ]
-                model_metrics = model_metrics[["created_at", "product_name", "avg_price"]]
+                model_metrics = model_metrics[["created_at", "product_name", "central_mayorista","avg_price"]]
                 model_metrics["pred"] = np.nan
 
                 for i, row in predictions.index.iterrows():
                  model_metrics.loc[
-                    (model_metrics["product_name"] == row["product_name"]),
+                    (model_metrics["product_name"] == row["product_name"]) &
+                    (model_metrics["central_mayorista"] == row["central_mayorista"]),
                     "pred"] = pred[i]
 
                 float_columns = model_metrics.select_dtypes(include=['float64']).columns
@@ -100,7 +101,7 @@ class ModelsEvaluationStep:
         try:
             real_sipsa['created_at'] = pd.to_datetime(real_sipsa['created_at'])
             real_sipsa['rolling_price'] = real_sipsa.groupby('product_name')['avg_price'].shift(5)
-            sipsa_rolling = real_sipsa[["created_at","product_name","avg_price","rolling_price"]]
+            sipsa_rolling = real_sipsa[["created_at","product_name","central_mayorista","avg_price","rolling_price"]]
             sipsa_rolling['rolling_smape'] = 2 * abs(sipsa_rolling['rolling_price'] - sipsa_rolling['avg_price']) / (abs(sipsa_rolling['rolling_price']) + abs(sipsa_rolling['avg_price']))
         
         except Exception as e:
@@ -132,7 +133,7 @@ class ModelsEvaluationStep:
 
             for model_metrics in all_models_metrics:
                 model_metrics['created_at'] = pd.to_datetime(model_metrics['created_at'])
-                training_metrics = pd.merge(model_metrics, training_metrics, on=["created_at", "product_name"], how="left")
+                training_metrics = pd.merge(model_metrics, training_metrics, on=["created_at", "product_name","central_mayorista"], how="left")
 
             
 

@@ -125,6 +125,7 @@ class PricesFeatureEngineering:
 
         df.reset_index(inplace=True)
         df = pd.merge(df, weekly_df, on=['product_name', 'week_idx'], how='left')
+        df.ffill(inplace=True)
 
         self.df = df
 
@@ -164,6 +165,7 @@ class PricesFeatureEngineering:
         df = apply_transformations(df, "year", "next_week_price_last_1year", "product_name", 1)
         df = apply_transformations(df, "year", "week_price_last_2year", "product_name", 2)
         df = apply_transformations(df, "year", "next_week_price_last_2year", "product_name", 2)
+        df.ffill(inplace=True)
 
         self.df = df
 
@@ -192,6 +194,7 @@ class PricesFeatureEngineering:
 
         df.reset_index(inplace=True)
         df = pd.merge(df, monthly_df, on=['product_name', 'month_idx'], how='left')
+        df.ffill(inplace=True)
 
         self.df = df
 

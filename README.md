@@ -1,8 +1,10 @@
-# Microservicio de Forecasting de Demanda
+# Microservicio de Pronostico de Precios Agricolas.
 
 ## Descripción del microservicio:
 
-Este microservicio proporciona capacidades de forecasting de demanda para apoyar la planificación y gestión de inventario. Utiliza algoritmos avanzados para prever la demanda futura en base a datos históricos y otros factores relevantes.
+El servicio de forecasting de precios de productos agricolas es un esfuerzo integrado a la estrategia de pricing adelantada por la celula de Pricing e Inventario. El objetivo principal de esta herramienta es permitir a los equipos de procurement y sales optimizar estrategias de precios, permitiendoles preveer las tendencias de precios para cerrar mejores acuerdos de compra-venta con usuarios de la cadena de suminitro agricola.
+
+El alcance inicial de este proyecto es la generación de pronostico de precios para los siguientes 5 dias.
 
 ## Características Principales
 

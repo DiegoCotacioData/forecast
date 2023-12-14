@@ -5,7 +5,7 @@ import os
 MAX_PREDICTION_LENGTH = 5   # Forecast Horizont
 MAX_ENCODER_LENGTH = 620    # Context Window 
 BATCH_SIZE = 28           
-WINDOW_DAYS = 790           # First training dataframe data point
+WINDOW_DAYS = 770           # First training dataframe data point
 
 MODEL_ACCELERATOR = "cpu"  # change to GPU for prod
 

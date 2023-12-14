@@ -157,6 +157,8 @@ class InferenceDatasetCreationStep:
         df = df.drop(columns=['weekly_avg_price_new', 'weekly_var_new', 'weekly_var_type_new',
                                 'week_price_last_1year_new', 'week_price_last_2year_new',
                                 'next_week_price_last_1year_new','next_week_price_last_1year_new'])
+        
+        df.ffill(inplace=True)
 
         return df
 
@@ -186,10 +188,13 @@ class InferenceDatasetCreationStep:
 
         df = apply_transformations(df, "year", "week_price_last_1year", "product_name", 1)
         df = apply_transformations(df, "year", "week_price_last_2year", "product_name", 2)
+        
 
         max_date_encoder = encoder_data["created_at"].max()
         condition = original["created_at"] > max_date_encoder
         original.loc[condition, ["price_1_year_back_perc", "price_2_year_back_perc"]] = df.loc[condition, ["price_1_year_back_perc", "price_2_year_back_perc"]]
+
+        
 
         return original
 
