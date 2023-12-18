@@ -21,5 +21,8 @@ jobs:
        pip install -r etl_requirements.txt
 
    - name: Sipsa Prices Pipeline
-     run: python src/etl_pipelines/sipsa_prices_pipeline.py
-     #working-directory: ./src
+     run: 
+      cd src
+      python executors/etl_prices_executor.py
+
+     

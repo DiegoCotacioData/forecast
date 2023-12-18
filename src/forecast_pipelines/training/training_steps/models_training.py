@@ -44,7 +44,7 @@ class ModelsTrainingStep:
        
             for model_instance in self.models_config:
 
-                logger = TensorBoardLogger("src/forecast_pipelines/training_checkpoints")
+                logger = TensorBoardLogger("forecast_pipelines/training_checkpoints")
                 early_stop_callback = EarlyStopping(monitor="val_loss",min_delta=1e-4, patience=10,verbose=False, mode="min")
                 lr_logger = LearningRateMonitor()
 

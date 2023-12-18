@@ -1,23 +1,69 @@
+import service_settings.infra_settings as infra
+from etl_pipelines.prices_pipeline_methods import SipsaPricesMethods
+from etl_pipelines.abasto_vols_pipeline_methods import AbastoVolumesETL
+from etl_pipelines.export_vols_pipeline_methods import ExportVolumesETL
 
-# ETL PIPELINES:
+
+class BaseETLConfig:
+
+    def __init__(self):
+
+        self.datasource_name: str = None
+        self.input_data_source_url: str = None
+        self.output_data_base_url: str = None
+        self.output_worksheet_name: str = None
+        self.waiting_time: int = None
+        self.etl_methods = None
 
 
-# SIPSA PRICES PIPELINE:
-PRODUCTS_SIPSA_CODES ={
-            'aguacate_hass': '89',
-            'aguacate_papelillo': '90',
-            'naranja_valencia': '86',
-            'limon_tahiti': '81',
-            'platano_harton_primera': '189',
-            'platano_harton_extra': '187',
-            'maracuya': '133',
-            'papaya tainung': '6002',
-            'lulo': '116',
-            'papa parda pastusa': '167',
-            'cebolla cabezona blanca': '18',
-            'piña gold': '144',
-            'zanahoria': '54'
-        }
+class SipsaPricesPipeline(BaseETLConfig):
+
+    def __init__(self):
+        super().__init__()
+        self.datasource_name = "sipsa_prices"
+        self.input_data_source_url = infra.SIPSA_PRICES_API_URL
+        self.output_data_base_url = infra.PRICES_URL_TABLE
+        self.output_worksheet_name = infra.PRICES_WORKSHEETNAME
+        self.waiting_time = 5
+        self.etl_methods = SipsaPricesMethods(self.datasource_name,
+                                          self.input_data_source_url,
+                                          self.output_data_base_url,
+                                          self.output_worksheet_name,
+                                          self.waiting_time)
+        
+class AbastoVolumesPipeline(BaseETLConfig):
+
+    def __init__(self):
+        super().__init__()
+        self.datasource_name = "volumes_prices"
+        self.input_data_source_url = "www.volumes_url.com"
+        self.output_data_base_url = "www.volumes_output_url.com"
+        self.output_worksheet_name = "volumes_output"
+        self.waiting_time = 5
+        self.etl_methods = AbastoVolumesETL(self.datasource_name,
+                                          self.input_data_source_url,
+                                          self.output_data_base_url,
+                                          self.output_worksheet_name,
+                                          self.waiting_time)
+        
+
+class ExportVolumesPipeline(BaseETLConfig):
+
+    def __init__(self):
+        super().__init__()
+        self.datasource_name = "expo_volumes"
+        self.input_data_source_url = "www.expovolumes_url.com"
+        self.output_data_base_url = "www.expovolumes_output_url.com"
+        self.output_worksheet_name = "expo_volumes_output"
+        self.waiting_time = 5
+        self.etl_methods = ExportVolumesETL(self.datasource_name,
+                                          self.input_data_source_url,
+                                          self.output_data_base_url,
+                                          self.output_worksheet_name,
+                                          self.waiting_time)
+        
+
+
 
 SIPSA_REQUEST_HEADERS = {
             'Accept': 'application/json, text/plain, */*',
@@ -36,4 +82,3 @@ SIPSA_REQUEST_HEADERS = {
             'sec-ch-ua-platform': '"macOS"'
             }
 
-SIPSA_API_URL = 'https://sen.dane.gov.co/variacionPrecioMayoristaSipsa_ws/rest/SipsaServices/selectAllInfoProduct/'

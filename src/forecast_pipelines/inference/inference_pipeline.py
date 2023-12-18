@@ -14,7 +14,6 @@ logger = get_logger(__name__)
 
 class InferencePipeline:
 
-
     def __init__(self, 
                  training_artifacts: dict,
                  dict_cross_val_metrics: dict,
@@ -49,13 +48,13 @@ class InferencePipeline:
 
      
     def run_pipeline(self):
-
         """
         Runs the inference pipeline.
         """
 
+        logger.info("Inicio pipeline de inferencia") #tempora
         try:
-
+            logger.info("Inicio creacion de dataset de inferencia")#tempora
             inference_dataset = InferenceDatasetCreationStep(self.max_encoder_length,
                                                         self.max_prediction_length,
                                                         self.batch_size,
@@ -65,7 +64,7 @@ class InferencePipeline:
             forecast_dataloaders, decoder_data, new_prediction_data = inference_dataset.create_prediction_data()
             logger.info("Decoder generation step completed")
             
-           
+            logger.error("Inicio creacion de forecast")#tempora
             forecast_generation =  ForecastingCreationStep(forecast_dataloaders,
                                                        decoder_data,
                                                        self.training_artifacts )
@@ -73,7 +72,7 @@ class InferencePipeline:
             dict_forecast_results = forecast_generation.create_forecast()
             logger.info("Forecast generation step completed")
 
-            
+            logger.info("Inicio posproceso forecast")#tempora
             posprocess_step = ForecastPosprocessingStep(new_prediction_data,
                                                     self.dict_cross_val_metrics,
                                                     dict_forecast_results,
@@ -82,7 +81,7 @@ class InferencePipeline:
             df_rolling_forecast, df_global_metrics, df_cv_metrics, df_raw_forecast_dataframe= posprocess_step.posprocess_forecast_results()
             logger.info(" Forecast posprocessing step completed")
 
-            
+            logger.info("Inicio seleccion forecast")#tempora
             select_step = ForecastSelectionStep(df_raw_forecast_dataframe)
 
             df_selected_multiple_forecast, df_selected_single_forecast, forecast_data_point = select_step.select_final_output()

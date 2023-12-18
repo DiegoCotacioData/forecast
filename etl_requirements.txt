@@ -3,7 +3,7 @@ google-auth-httplib2==0.1.1
 google-auth-oauthlib==1.1.0
 gspread==5.12.0
 gspread-dataframe==3.3.1
-requests
-pygsheets
-pandas
-numpy
+requests==2.31.0
+pygsheets==2.0.6
+pandas==2.1.4
+numpy==1.26.2

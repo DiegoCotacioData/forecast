@@ -1,3 +1,7 @@
+
+#import os, sys
+#sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
+
 import logging
 from typing import List
 
@@ -12,11 +16,11 @@ import pandas as pd
 class GoogleSheets:
 
     credentials = Credentials.from_service_account_file(
-        'src/utils/dashboard_manager_google_creds.json',
+        'utils/dashboard_manager_google_creds.json',
         scopes=['https://www.googleapis.com/auth/spreadsheets']
     )
     gc = gspread.authorize(credentials)
-    pyg = pygsheets.authorize(service_file='src/utils/dashboard_manager_google_creds.json')
+    pyg = pygsheets.authorize(service_file='utils/dashboard_manager_google_creds.json')
     
     """def import_sheets(self, url, worksheet_name):
         logging.info(f'[GoogleSheets:import_sheets]| extraction process for table {worksheet_name} has started')

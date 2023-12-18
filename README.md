@@ -92,39 +92,9 @@ El diseño del servicio se realiza siguiendo practicas de diseño de soluciones 
 ```
 
 
-## Instalación y Configuración
-
-### Requisitos Previos
-
-- [Listar los requisitos previos, como un entorno de ejecución específico, bibliotecas, etc.]
-
-### Configuración
-
-1. Clone este repositorio: `git clone https://github.com/tuusuario/tumicroservicio.git`
-2. Navegue al directorio del microservicio: `cd tumicroservicio`
-3. Configure los archivos de configuración según sea necesario.
-
-### Ejecución
-
-1. Ejecute el servicio de forecasting: `comando de ejecución`
-2. Acceda a la API a través del endpoint proporcionado.
-
-
-
-Si desea contribuir a este proyecto, siga los siguientes pasos:
-
-1. Fork del repositorio.
-2. Cree una nueva rama para su función: `git checkout -b feature/nueva-funcion`.
-3. Realice los cambios y confirme: `git commit -m "Agregada nueva función"`.
-4. Envíe un Pull Request.
-
-## Problemas Conocidos
-
-[Listar cualquier problema conocido y posibles soluciones o mitigaciones.]
-
 ## Licencia
 
-Este proyecto está bajo la licencia [especificar la licencia].
+Este proyecto está bajo la licencia MIT.
 
 ---
-© [Año] [Tu Nombre o Nombre de tu Empresa]
+© 2023 Rurall

@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from pytorch_forecasting import Baseline, NHiTS,TemporalFusionTransformer, TimeSeriesDataSet, DeepAR
 
-from ...feature.features_steps.methods.feature_engineering_methods import PricesFeatureEngineering
+from etl_pipelines.other_methods.prices_methods import PricesFeatureEngineering
 from utils.logger_config import get_logger
 logger = get_logger(__name__)
 
@@ -82,29 +82,19 @@ class InferenceDatasetCreationStep:
           prediction_data = self.calculate_weekly_signals(prediction_data, encoder_data)
           new_prediction_data = self.normalize_new_percentiles(prediction_data, encoder_data)
 
-
           max_date_encoder = encoder_data["created_at"].max()
           condition =  new_prediction_data['created_at'] > max_date_encoder
           new_prediction_data.loc[condition, 'avg_price'] = 0
           
           new_prediction_data.drop('week_idx', axis=1, inplace=True)
-
-          # Create the TimeSeriesDataset Object required for inference
           new_data = TimeSeriesDataSet.from_dataset(training_dataset, new_prediction_data, predict=True, stop_randomization=True)
+          forecast_dataloader = new_data.to_dataloader(train=False, batch_size=self.batch_size, num_workers=8)  
 
-          # Create the Dataloader Object required for inference
-          forecast_dataloader = new_data.to_dataloader(train=False, batch_size=self.batch_size, num_workers=8)  # Output
-
-          # Store the inference dataloaders in the dict
           forecast_dataloaders[model_name] = forecast_dataloader
 
 
         return forecast_dataloaders, decoder_data, new_prediction_data
 
-
-
-
-    # Custom feature engineering methods for decoder
 
     def apply_decoder_feature_engineering(self, decoder_data):
 
@@ -163,9 +153,6 @@ class InferenceDatasetCreationStep:
         return df
 
 
-
-    
-
     def normalize_new_percentiles(self, prediction_data, encoder_data):
 
 
@@ -188,13 +175,11 @@ class InferenceDatasetCreationStep:
 
         df = apply_transformations(df, "year", "week_price_last_1year", "product_name", 1)
         df = apply_transformations(df, "year", "week_price_last_2year", "product_name", 2)
-        
 
         max_date_encoder = encoder_data["created_at"].max()
         condition = original["created_at"] > max_date_encoder
         original.loc[condition, ["price_1_year_back_perc", "price_2_year_back_perc"]] = df.loc[condition, ["price_1_year_back_perc", "price_2_year_back_perc"]]
 
-        
 
         return original
 

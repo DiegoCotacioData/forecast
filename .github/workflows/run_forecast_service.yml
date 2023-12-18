@@ -18,8 +18,9 @@ jobs:
    - name: Install dependencies
      run: |
        python -m pip install --upgrade pip
-       pip install -r requirements.txt
+       pip install -r forecast_requirements.txt
 
    - name: Prices Forecast Service
-     run: python src/main.py
-     #working-directory: ./src
+     run: 
+      cd src
+      python executors/prices_forecast_executor.py
