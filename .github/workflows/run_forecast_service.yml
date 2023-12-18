@@ -21,6 +21,6 @@ jobs:
        pip install -r forecast_requirements.txt
 
    - name: Prices Forecast Service
-     run: 
+     run: |
       cd src
       python executors/prices_forecast_executor.py
